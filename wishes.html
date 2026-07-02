@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wishes from the Universe ✦</title>
+<meta name="description" content="The universe has something to say." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Dancing+Script:wght@500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="night">
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">For Diya✿</a>
+  <button class="nav-toggle" aria-label="Menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Welcome</a><a href="gallery.html">Gallery</a><a href="fireworks.html">Fireworks</a><a href="letters.html">Open When</a><a href="garden.html">Garden</a><a href="wonderful.html">100 Things</a><a href="wishes.html">Wishes</a><a href="lanterns.html">Lanterns</a><a href="goodnight.html">Goodnight</a>
+  </div>
+</nav>
+
+<section class="sky-stage">
+  <div class="aurora"></div>
+  <canvas id="starsky"></canvas>
+  <div class="sky-hint">
+    <p class="eyebrow" id="wishes-eyebrow" style="color:var(--star)">Hover over a star</p>
+    <h1>Wishes from the Universe</h1>
+    <p id="wishes-desc">Every star above is whispering something for you. Move over one. Let it speak.</p>
+  </div>
+</section>
+
+<div class="wish-popup" id="popup"></div>
+
+<div style="text-align:center; padding: 40px 24px 80px; position: relative; z-index: 2;">
+  <a href="lanterns.html" class="next-link" style="background: rgba(255,255,255,0.1); color:#fff; border-color: rgba(255,255,255,0.2)">Release a lantern →</a>
+</div>
+
+<script src="script.js"></script>
+<script>
+const WISHES = [
+  "May this year surprise you in the best ways.",
+  "May you discover new reasons to believe in yourself.",
+  "May your favorite dreams find their way to reality.",
+  "May happiness visit often and stay awhile.",
+  "May your soft heart stay soft and find safe places.",
+  "May you fall in love with your own life.",
+  "May the right people find you.",
+  "May you laugh more than you cry.",
+  "May rest find you when you need it.",
+  "May your courage outgrow your fear.",
+  "May the world keep showing you it's worth it.",
+  "May you be proud of who you're becoming.",
+];
+
+const canvas = document.getElementById("starsky");
+const ctx = canvas.getContext("2d");
+function fit(){canvas.width=innerWidth;canvas.height=innerHeight;}
+fit(); addEventListener("resize", () => { fit(); init(); });
+
+let stars = [];
+function init() {
+  stars = [];
+  const count = Math.min(140, Math.floor(canvas.width * canvas.height / 9000));
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.6 + 0.6,
+      tw: Math.random() * Math.PI * 2,
+      wish: WISHES[Math.floor(Math.random()*WISHES.length)]
+    });
+  }
+}
+init();
+
+function draw(t) {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // constellations: connect nearest
+  ctx.strokeStyle = "rgba(255,255,255,0.06)"; ctx.lineWidth = 1;
+  for (let i = 0; i < stars.length; i++) {
+    for (let j = i+1; j < stars.length; j++) {
+      const dx = stars[i].x - stars[j].x;
+      const dy = stars[i].y - stars[j].y;
+      const d = Math.hypot(dx,dy);
+      if (d < 90) { ctx.beginPath(); ctx.moveTo(stars[i].x, stars[i].y); ctx.lineTo(stars[j].x, stars[j].y); ctx.stroke(); }
+    }
+  }
+  stars.forEach(s => {
+    s.tw += 0.04;
+    const a = 0.5 + Math.sin(s.tw) * 0.4;
+    ctx.globalAlpha = a;
+    ctx.fillStyle = "#fff4c2";
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = a * 0.3;
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.r*3, 0, Math.PI*2); ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(draw);
+}
+draw();
+
+const popup = document.getElementById("popup");
+let timer;
+function showWish(text, x, y) {
+  popup.textContent = text;
+  popup.classList.add("show");
+  clearTimeout(timer);
+  timer = setTimeout(() => popup.classList.remove("show"), 3500);
+}
+
+function pickStar(x, y) {
+  let best = null, bd = 36;
+  for (const s of stars) {
+    const d = Math.hypot(s.x - x, s.y - y);
+    if (d < bd) { bd = d; best = s; }
+  }
+  return best;
+}
+canvas.addEventListener("mousemove", e => {
+  const s = pickStar(e.clientX, e.clientY);
+  if (s) showWish(s.wish, e.clientX, e.clientY);
+});
+canvas.addEventListener("click", e => {
+  const s = pickStar(e.clientX, e.clientY) || stars[Math.floor(Math.random()*stars.length)];
+  showWish(s.wish);
+  confettiBurst(e.clientX, e.clientY);
+});
+
+/* Mobile-friendly: instant touch + adaptive hint */
+const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+if (isTouch) {
+  document.getElementById("wishes-eyebrow").textContent = "Tap a star";
+  document.getElementById("wishes-desc").textContent = "Every star above is whispering something for you. Tap one. Let it speak.";
+}
+
+let lastTouchT = 0;
+canvas.addEventListener("touchstart", e => {
+  e.preventDefault();
+  const now = Date.now();
+  if (now - lastTouchT < 400) return; // debounce
+  lastTouchT = now;
+  const touch = e.touches[0];
+  const s = pickStar(touch.clientX, touch.clientY) || stars[Math.floor(Math.random()*stars.length)];
+  showWish(s.wish);
+  confettiBurst(touch.clientX, touch.clientY);
+}, { passive: false });
+</script>
+</body>
+</html>

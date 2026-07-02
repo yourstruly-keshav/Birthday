@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Flower Conservatory ❀</title>
+<meta name="description" content="A garden blooming in your honor." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Dancing+Script:wght@500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="garden">
+<div class="floaters"></div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">For Diya✿</a>
+  <button class="nav-toggle" aria-label="Menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Welcome</a><a href="gallery.html">Gallery</a><a href="fireworks.html">Fireworks</a><a href="letters.html">Open When</a><a href="garden.html">Garden</a><a href="wonderful.html">100 Things</a><a href="wishes.html">Wishes</a><a href="lanterns.html">Lanterns</a><a href="goodnight.html">Goodnight</a>
+  </div>
+</nav>
+
+<section class="page">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Conservatory</p>
+      <h2 class="display">A Garden, Blooming in Your Honour</h2>
+      <p>A garden with a message on every flower for you</p>
+    </div>
+
+    <div class="garden-grid" id="garden"></div>
+
+    <div class="bouquet-section" id="bouquetSection">
+      <p class="eyebrow">A gift, gathered</p>
+      <h3 class="display bouquet-title">Every bloom, tied together - for you</h3>
+      <p class="bouquet-sub">All the flowers from the garden, arranged into one little bouquet.</p>
+
+      <div class="bouquet">
+        <div class="bouquet-halo"></div>
+        <div class="bouquet-paper-back"></div>
+        <div class="bouquet-flowers" id="bouquetFlowers"></div>
+        <div class="bouquet-paper-front"></div>
+        <div class="bouquet-paper-front bouquet-paper-front--inner"></div>
+        <div class="bouquet-twine"></div>
+        <div class="bouquet-ribbon-tail bouquet-ribbon-tail--l"></div>
+        <div class="bouquet-ribbon-tail bouquet-ribbon-tail--r"></div>
+        <div class="bouquet-bow">
+          <span class="loop loop-l"></span>
+          <span class="loop loop-r"></span>
+          <span class="bouquet-knot"></span>
+        </div>
+        <div class="bouquet-tag">- for you, with love ✿</div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <a href="wonderful.html" class="next-link">100 wonderful things →</a>
+    </div>
+  </div>
+</section>
+
+<script src="script.js"></script>
+<script>
+/* SVG flower factory. Single sunflower is the centerpiece. */
+function flowerSVG(kind) {
+  if (kind === "rose") {
+    return `<svg viewBox="0 0 120 120" class="sway">
+      <g transform="translate(60 60)">
+        ${[0,45,90,135,180,225,270,315].map(a =>
+          `<ellipse rx="22" ry="14" fill="#e89bb0" transform="rotate(${a})" opacity="0.85"/>`
+        ).join("")}
+        <circle r="14" fill="#c4748b"/>
+      </g>
+      <path d="M60 90 Q58 110 60 120" stroke="#6a8f5e" stroke-width="3" fill="none"/>
+    </svg>`;
+  }
+  if (kind === "tulip") {
+    return `<svg viewBox="0 0 120 120" class="sway">
+      <path d="M60 30 Q40 35 42 70 Q50 80 60 80 Q70 80 78 70 Q80 35 60 30 Z" fill="#f4a6c0"/>
+      <path d="M55 32 Q58 60 60 80" stroke="#d97a9a" stroke-width="2" fill="none"/>
+      <path d="M60 80 L60 115" stroke="#6a8f5e" stroke-width="3"/>
+      <path d="M60 100 Q75 95 80 85" stroke="#6a8f5e" stroke-width="3" fill="none"/>
+    </svg>`;
+  }
+  if (kind === "lily") {
+    return `<svg viewBox="0 0 120 120" class="sway">
+      <g transform="translate(60 60)">
+        ${[0,72,144,216,288].map(a =>
+          `<path d="M0 0 Q -8 -30 0 -45 Q 8 -30 0 0 Z" fill="#fff5e6" stroke="#f5c98c" stroke-width="1.5" transform="rotate(${a})"/>`
+        ).join("")}
+        <circle r="6" fill="#e8a23a"/>
+      </g>
+      <path d="M60 90 L60 118" stroke="#6a8f5e" stroke-width="3"/>
+    </svg>`;
+  }
+  if (kind === "orchid") {
+    return `<svg viewBox="0 0 120 120" class="sway">
+      <g transform="translate(60 55)">
+        <ellipse cx="0" cy="-20" rx="14" ry="22" fill="#d8b9ff"/>
+        <ellipse cx="-22" cy="-2" rx="20" ry="14" fill="#c9a3f5"/>
+        <ellipse cx="22" cy="-2" rx="20" ry="14" fill="#c9a3f5"/>
+        <ellipse cx="-12" cy="18" rx="16" ry="20" fill="#b988e8"/>
+        <ellipse cx="12" cy="18" rx="16" ry="20" fill="#b988e8"/>
+        <circle r="6" fill="#7a4fb3"/>
+      </g>
+      <path d="M60 90 L60 118" stroke="#6a8f5e" stroke-width="3"/>
+    </svg>`;
+  }
+  if (kind === "sunflower") {
+    return `<svg viewBox="0 0 140 140" class="sway">
+      <g transform="translate(70 65)">
+        ${Array.from({length: 16}).map((_,i)=>`<ellipse rx="14" ry="32" fill="#f5b942" transform="rotate(${i*22.5})" opacity="0.95"/>`).join("")}
+        ${Array.from({length: 16}).map((_,i)=>`<ellipse rx="10" ry="26" fill="#e8a02a" transform="rotate(${i*22.5+11})"/>`).join("")}
+        <circle r="20" fill="#6b3a18"/>
+        <circle r="20" fill="url(#dots)"/>
+        <defs>
+          <pattern id="dots" width="5" height="5" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1" fill="#3a200d"/>
+          </pattern>
+        </defs>
+      </g>
+      <path d="M70 100 L70 130" stroke="#4a7340" stroke-width="4"/>
+      <path d="M70 115 Q90 110 95 95" stroke="#4a7340" stroke-width="3" fill="none"/>
+    </svg>`;
+  }
+}
+
+const FLOWERS = [
+  { k: "lily",    c: "You make ordinary moments brighter." },
+  { k: "orchid",  c: "Your kindness leaves a mark." },
+  { k: "tulip",   c: "You bloom in your own perfect time." },
+  { k: "rose",    c: "The world is better because you're in it." },
+  { k: "orchid",  c: "You have a way of making people feel welcome." },
+  { k: "tulip",   c: "You carry softness like a strength." },
+  { k: "lily",    c: "You are deeply, deeply loved." },
+  { k: "rose",    c: "Your laugh lights up the room." },
+  { k: "sunflower", c: "You are the centerpiece. Today and always." },
+  { k: "orchid",  c: "You make people feel seen." },
+  { k: "tulip",   c: "Your gentleness is a gift." },
+  { k: "lily",    c: "You radiate quiet courage." },
+];
+
+const garden = document.getElementById("garden");
+FLOWERS.forEach(f => {
+  const el = document.createElement("div");
+  el.className = "flower" + (f.k === "sunflower" ? " sunflower" : "");
+  el.innerHTML = flowerSVG(f.k) + `<div class="compliment">${f.c}</div>`;
+  el.addEventListener("click", () => {
+    document.querySelectorAll(".flower.active").forEach(x => x !== el && x.classList.remove("active"));
+    el.classList.toggle("active");
+  });
+  garden.appendChild(el);
+});
+
+/* =========================================================
+   Build the bouquet - florist hand-tied arrangement
+   Coordinate box: 100x100. Wrap occupies bottom ~48% (y>=52).
+   Flowers cluster in a soft rounded dome (y: 6..56).
+   ========================================================= */
+
+/* Eucalyptus sprig - long, drapey, sage green */
+function eucalyptusSVG(flip = false) {
+  const t = flip ? `transform="scale(-1,1) translate(-100,0)"` : "";
+  return `<svg viewBox="0 0 100 100" ${t}>
+    <path d="M50 96 C 48 70, 52 40, 50 6" stroke="#7a9a6e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <g fill="#9ab98c" stroke="#6f8a62" stroke-width="0.5">
+      <ellipse cx="44" cy="20" rx="5" ry="3" transform="rotate(-35 44 20)"/>
+      <ellipse cx="56" cy="26" rx="5" ry="3" transform="rotate( 35 56 26)"/>
+      <ellipse cx="42" cy="34" rx="5.5" ry="3.2" transform="rotate(-30 42 34)"/>
+      <ellipse cx="58" cy="40" rx="5.5" ry="3.2" transform="rotate( 30 58 40)"/>
+      <ellipse cx="42" cy="50" rx="6" ry="3.4" transform="rotate(-28 42 50)"/>
+      <ellipse cx="58" cy="56" rx="6" ry="3.4" transform="rotate( 28 58 56)"/>
+      <ellipse cx="44" cy="68" rx="6" ry="3.4" transform="rotate(-22 44 68)"/>
+      <ellipse cx="56" cy="74" rx="6" ry="3.4" transform="rotate( 22 56 74)"/>
+    </g>
+    <g fill="#b6cfa5" opacity="0.7">
+      <ellipse cx="44" cy="20" rx="2.6" ry="1.4" transform="rotate(-35 44 20)"/>
+      <ellipse cx="42" cy="50" rx="3" ry="1.6" transform="rotate(-28 42 50)"/>
+      <ellipse cx="58" cy="40" rx="3" ry="1.6" transform="rotate( 30 58 40)"/>
+    </g>
+  </svg>`;
+}
+
+/* Baby's breath cluster - tiny cream dots */
+function babySBreathSVG() {
+  return `<svg viewBox="0 0 100 100">
+    <g fill="#fffaf0" stroke="#e9d9c4" stroke-width="0.4">
+      <circle cx="30" cy="40" r="2.2"/><circle cx="38" cy="32" r="1.8"/>
+      <circle cx="46" cy="42" r="2.4"/><circle cx="54" cy="34" r="2"/>
+      <circle cx="62" cy="44" r="2.2"/><circle cx="70" cy="36" r="1.8"/>
+      <circle cx="34" cy="52" r="1.8"/><circle cx="50" cy="56" r="2"/>
+      <circle cx="66" cy="54" r="1.8"/><circle cx="42" cy="62" r="1.6"/>
+      <circle cx="58" cy="64" r="1.6"/>
+    </g>
+    <g fill="#fff5e1" opacity="0.6">
+      <circle cx="46" cy="42" r="0.9"/><circle cx="62" cy="44" r="0.9"/>
+      <circle cx="50" cy="56" r="0.7"/>
+    </g>
+  </svg>`;
+}
+
+const bouquetFlowers = document.getElementById("bouquetFlowers");
+
+function addBloom(cls, html, a, i, baseDelay = 0) {
+  const b = document.createElement("div");
+  b.className = "b-flower " + cls;
+  b.style.left = a.x + "%";
+  b.style.top  = a.y + "%";
+  b.style.zIndex = a.z;
+  b.style.setProperty("--bs", a.s);
+  b.style.setProperty("--br", a.r + "deg");
+  b.style.setProperty("--delay", (baseDelay + i * 0.06) + "s");
+  b.innerHTML = html;
+  bouquetFlowers.appendChild(b);
+}
+
+/* --- Layer 1: eucalyptus sprigs draping out the sides of the bouquet --- */
+const EUCA = [
+  // side drapes, hanging slightly downward from the bouquet shoulders
+  { x: 22, y: 42, s: 1.0, r: -95, z: 3, flip:false }, // left drape
+  { x: 78, y: 42, s: 1.0, r:  95, z: 3, flip:true  }, // right drape
+  // upper back fillers - short, pointing up between blooms
+  { x: 32, y: 16, s: 0.75, r: -20, z: 2, flip:false },
+  { x: 68, y: 16, s: 0.75, r:  20, z: 2, flip:true  },
+  { x: 50, y: 10, s: 0.80, r:   0, z: 2, flip:false },
+  // mid-side fillers
+  { x: 18, y: 30, s: 0.85, r: -60, z: 2, flip:false },
+  { x: 82, y: 30, s: 0.85, r:  60, z: 2, flip:true  },
+];
+EUCA.forEach((a, i) => addBloom("euca", eucalyptusSVG(a.flip), a, i, 0));
+
+/* --- Layer 2: back-row blooms (smaller, recessed) --- */
+const BACK = [
+  { k:"lily",   x: 28, y: 18, s: 0.62, r: -22, z: 3 },
+  { k:"orchid", x: 72, y: 18, s: 0.62, r:  22, z: 3 },
+  { k:"tulip",  x: 50, y: 12, s: 0.72, r:   0, z: 3 },
+  { k:"rose",   x: 20, y: 28, s: 0.60, r: -32, z: 3 },
+  { k:"rose",   x: 80, y: 28, s: 0.60, r:  32, z: 3 },
+  { k:"tulip",  x: 38, y: 14, s: 0.58, r:  -8, z: 3 },
+  { k:"tulip",  x: 62, y: 14, s: 0.58, r:   8, z: 3 },
+];
+BACK.forEach((a, i) => addBloom("", flowerSVG(a.k), a, i, 0.25));
+
+/* --- Layer 3: mid ring (the body of the dome) --- */
+const MID = [
+  { k:"rose",     x: 32, y: 26, s: 0.88, r: -14, z: 5 },
+  { k:"tulip",    x: 68, y: 26, s: 0.88, r:  14, z: 5 },
+  { k:"orchid",   x: 22, y: 38, s: 0.82, r: -22, z: 5 },
+  { k:"lily",     x: 78, y: 38, s: 0.82, r:  22, z: 5 },
+  { k:"rose",     x: 40, y: 40, s: 0.86, r:  -6, z: 6 },
+  { k:"tulip",    x: 60, y: 40, s: 0.86, r:   6, z: 6 },
+  { k:"orchid",   x: 50, y: 22, s: 0.78, r:   0, z: 4 },
+  { k:"lily",     x: 36, y: 34, s: 0.74, r: -10, z: 6 },
+  { k:"orchid",   x: 64, y: 34, s: 0.74, r:  10, z: 6 },
+];
+MID.forEach((a, i) => addBloom("", flowerSVG(a.k), a, i, 0.45));
+
+/* --- Layer 4: focal sunflower --- */
+addBloom("focal", flowerSVG("sunflower"),
+  { x: 50, y: 32, s: 1.0, r: -4, z: 8 }, 0, 0.7);
+
+/* --- Layer 5: front edge tumblers (overflow the wrap top) --- */
+const FRONT = [
+  { k:"rose",   x: 30, y: 48, s: 0.74, r: -18, z: 7 },
+  { k:"orchid", x: 70, y: 48, s: 0.74, r:  18, z: 7 },
+  { k:"lily",   x: 50, y: 50, s: 0.78, r:   2, z: 7 },
+  { k:"tulip",  x: 20, y: 44, s: 0.62, r: -38, z: 6 },
+  { k:"tulip",  x: 80, y: 44, s: 0.62, r:  38, z: 6 },
+  { k:"rose",   x: 42, y: 52, s: 0.66, r:  -8, z: 7 },
+  { k:"rose",   x: 58, y: 52, s: 0.66, r:   8, z: 7 },
+];
+FRONT.forEach((a, i) => addBloom("", flowerSVG(a.k), a, i, 0.85));
+
+/* --- Layer 6: baby's-breath filler tucked in the gaps --- */
+const BB = [
+  { x: 30, y: 18, s: 0.55, r: -10, z: 4 },
+  { x: 70, y: 18, s: 0.55, r:  10, z: 4 },
+  { x: 50, y: 24, s: 0.50, r:   0, z: 4 },
+  { x: 22, y: 30, s: 0.55, r: -18, z: 4 },
+  { x: 78, y: 30, s: 0.55, r:  18, z: 4 },
+  { x: 40, y: 38, s: 0.45, r:   8, z: 7 },
+  { x: 60, y: 38, s: 0.45, r:  -8, z: 7 },
+  { x: 34, y: 50, s: 0.50, r: -14, z: 8 },
+  { x: 66, y: 50, s: 0.50, r:  14, z: 8 },
+];
+BB.forEach((a, i) => addBloom("bb", babySBreathSVG(), a, i, 1.05));
+
+/* Bloom the bouquet when scrolled into view */
+const bouquetSec = document.getElementById("bouquetSection");
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      bouquetSec.classList.add("bloomed");
+      io.unobserve(bouquetSec);
+    }
+  });
+}, { threshold: 0.2 });
+io.observe(bouquetSec);
+
+/* falling petals */
+function spawnPetal() {
+  const p = document.createElement("div");
+  p.className = "floater";
+  p.textContent = ["🌸","🌷","🌼"][Math.floor(Math.random()*3)];
+  p.style.left = Math.random()*100 + "%";
+  p.style.top = "-40px";
+  p.style.fontSize = (16+Math.random()*22)+"px";
+  p.style.transition = "transform 12s linear, opacity 12s";
+  p.style.opacity = 1;
+  document.querySelector(".floaters").appendChild(p);
+  requestAnimationFrame(() => {
+    p.style.transform = `translate(${(Math.random()-0.5)*200}px, ${innerHeight+80}px) rotate(${360*Math.random()}deg)`;
+    p.style.opacity = 0;
+  });
+  setTimeout(() => p.remove(), 12500);
+}
+setInterval(spawnPetal, 700);
+</script>
+</body>
+</html>

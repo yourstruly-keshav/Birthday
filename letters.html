@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Open When... ✉</title>
+<meta name="description" content="A collection of little notes for every kind of day." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Dancing+Script:wght@500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="floaters"></div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">For Diya✿</a>
+  <button class="nav-toggle" aria-label="Menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Welcome</a><a href="gallery.html">Gallery</a><a href="fireworks.html">Fireworks</a><a href="letters.html">Open When</a><a href="garden.html">Garden</a><a href="wonderful.html">100 Things</a><a href="wishes.html">Wishes</a><a href="lanterns.html">Lanterns</a><a href="goodnight.html">Goodnight</a>
+  </div>
+</nav>
+
+<section class="page">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">A small library</p>
+      <h2 class="display">Open When…</h2>
+      <p>A collection of little notes for every kind of day. Open one whenever you need it, you gave me notes like this and they helped me very much</p>
+    </div>
+
+    <div class="letters-grid" id="letters"></div>
+
+    <div class="sticky-note reveal" style="margin-top:80px">
+      Tap below for a random pocket of encouragement ↓
+    </div>
+    <div style="text-align:center">
+      <button class="btn" id="randomBtn">🌷 Surprise me</button>
+    </div>
+
+    <div class="page-footer">
+      <a href="garden.html" class="next-link">Step into the garden →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Letter modal -->
+<div class="letter-modal" id="modal">
+  <article class="letter">
+    <button class="close" aria-label="Close" id="closeLetter">×</button>
+    <h3 id="letterTitle"></h3>
+    <div id="letterBody"></div>
+  </article>
+</div>
+
+<script src="script.js"></script>
+<script>
+/* EDIT THE LETTERS HERE - keep adding or changing as you like */
+const LETTERS = [
+  { t: "Open When You're Sad",
+    b: "Hey you - I know it feels heavy right now. Please remember that sadness is not a verdict on your life; it's weather. Let it move through. Make tea. Wrap up. Let yourself rest. You are still everything you were yesterday, just a little tired today." },
+  { t: "Open When You're Angry",
+    b: "Your anger is allowed. It usually means something you care about deeply got bruised. Breathe - slow, four counts in, six counts out. You don't have to fix it tonight. You're not 'too much.' You're paying attention." },
+  { t: "Open When You're Overthinking",
+    b: "Put it down. The thought you're holding does not get more solved by being held tighter. Step outside, look at something far away, drink a glass of water. The answer will come when you give it room to land." },
+  { t: "Open When You're Stressed",
+    b: "Three things matter today. Just three. Write them down - everything else can wait until tomorrow without the world ending. You are not behind. You are doing more than anyone sees." },
+  { t: "Open When You Need Motivation",
+    b: "Remember why you started. Remember the version of you that wanted this so badly it kept her up at night. She's still in there, and she's so proud of how far you've come. Small step. Just one. Now." },
+  { t: "Open When You're Doubting Yourself",
+    b: "Doubt isn't proof - it's just noise. List five things you've already survived. Now five things you've already learned. See? You're not starting from nothing. You're starting from everything." },
+  { t: "Open When You Need A Smile",
+    b: "Picture the most ridiculous, undignified thing that's ever made you laugh. The one you can't tell people about. Yeah. That one. There it is. Hi." },
+  { t: "Open When Life Feels Difficult",
+    b: "Hard seasons don't last; soft ones come back. You've made it through 100% of your worst days so far. That's a remarkable record. Be gentle with yourself today, the way you'd be gentle with someone you love." },
+  { t: "Open When You Feel Alone",
+    b: "You're not alone - you're just out of sight of the people who love you for a moment. They're thinking about you more than you know. Send one tiny message to one person. Watch what comes back." },
+  { t: "Open When You Need Encouragement",
+    b: "You are doing it. Not perfectly, not painlessly - but you are doing it. Keep going. The next chapter is being written in your favour. I promise." },
+];
+
+const RANDOM = [
+  "You're allowed to take up space.",
+  "The world is better with you in it.",
+  "You don't have to earn rest.",
+  "Soft is still strong.",
+  "Your pace is the right pace.",
+  "You are not behind.",
+  "Someone is grateful for you today.",
+];
+
+const grid = document.getElementById("letters");
+LETTERS.forEach((l, i) => {
+  const el = document.createElement("div");
+  el.className = "envelope"; // already on-screen, no reveal needed
+  el.innerHTML = `<span class="seal">${i+1}</span><span class="label">${l.t}</span>`;
+  el.addEventListener("click", () => {
+    el.classList.add("open");
+    setTimeout(() => openLetter(l.t, l.b), 400);
+  });
+  grid.appendChild(el);
+});
+
+const modal = document.getElementById("modal");
+function openLetter(title, body) {
+  document.getElementById("letterTitle").textContent = title;
+  document.getElementById("letterBody").innerHTML = body.replace(/\n/g, "<br>");
+  modal.classList.add("open");
+}
+document.getElementById("closeLetter").onclick = () => modal.classList.remove("open");
+modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("open"); });
+
+document.getElementById("randomBtn").addEventListener("click", e => {
+  const msg = RANDOM[Math.floor(Math.random()*RANDOM.length)];
+  openLetter("A little reminder", msg);
+  confettiBurst(e.clientX, e.clientY);
+});
+
+spawnFloaters(["✉️","💌","🌸","✨"], 10);
+</script>
+</body>
+</html>

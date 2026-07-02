@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>100 Wonderful Things About You ✿</title>
+<meta name="description" content="A celebration of who you are." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Dancing+Script:wght@500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="floaters"></div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">For Diya✿</a>
+  <button class="nav-toggle" aria-label="Menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Welcome</a><a href="gallery.html">Gallery</a><a href="fireworks.html">Fireworks</a><a href="letters.html">Open When</a><a href="garden.html">Garden</a><a href="wonderful.html">100 Things</a><a href="wishes.html">Wishes</a><a href="lanterns.html">Lanterns</a><a href="goodnight.html">Goodnight</a>
+  </div>
+</nav>
+
+<section class="page">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">A celebration of who you are</p>
+      <h2 class="display">100 Wonderful Things About You</h2>
+      <p>Tap a card to turn it over. One little truth at a time.</p>
+    </div>
+
+    <div class="wonder-grid" id="wonders"></div>
+
+    <div class="page-footer">
+      <a href="wishes.html" class="next-link">Wishes from the universe →</a>
+    </div>
+  </div>
+</section>
+
+<script src="script.js"></script>
+<script>
+/* EDIT this list freely. Aim for ~100 - they don't all have to be deep. */
+const THINGS = [
+  "Your curiosity","Your determination","Your creativity","Your resilience","Your kindness",
+  "Your sense of humor","Your laugh","Your honesty","Your warmth","Your loyalty",
+  "Your patience","Your courage","Your generosity","Your imagination","Your taste in music",
+  "Your eye for beauty","Your handwriting","Your way with words","Your hugs","Your texts",
+  "Your wisdom","Your softness","Your strength","Your style","Your dance moves",
+  "Your wonder","Your spark","Your stubbornness","Your big heart","Your quiet courage",
+  "Your perspective","Your boldness","Your gentleness","Your weirdness","Your wit",
+  "Your empathy","Your discipline","Your spontaneity","Your standards","Your forgiveness",
+  "Your memory for details","Your taste in films","Your favourite playlists","Your laugh-snort","Your impressions",
+  "Your handwritten lists","Your aura","Your random facts","Your soft heart","Your loud joy",
+  "Your steady hands","Your steady mind","Your big dreams","Your tiny rituals","Your appetite for life",
+  "Your honest opinions","Your good taste","Your bad jokes","Your sleepy face","Your morning energy",
+  "Your soft voice","Your loud confidence","Your love for rom coms","Your laugh in pictures","Your eyebrows",
+  "Your hands","Your eyes","Your smile","Your kindness to strangers","Your kindness to yourself",
+  "Your way of remembering birthdays","Your love for people who matter","Your favorite flowers","Your pengu","Your favourite hoodie",
+  "Your lovely notes","Your podcasts","Vampire diaries","Your screenshots folder","Your camera roll",
+  "Your nicknames","Your loud opinions on small things","Your strong opinions on big things","Your taste in colour","Your taste in everything",
+  "Your way of caring","Your way of listening","Your way of showing up","Your way of saying sorry","Your way of saying I love you",
+  "Your dreams","Your princess way","Your fight","Your softness on hard days","Your laughter on light ones",
+  "Your way of making any place feel like home","Your way of being exactly, perfectly you","Your presence","Your emotional intelligence","Your love for family"
+];
+
+const grid = document.getElementById("wonders");
+THINGS.forEach((t, i) => {
+  const card = document.createElement("div");
+  card.className = "wcard";
+  card.innerHTML = `
+    <div class="wcard-inner">
+      <div class="wcard-front">${i+1}</div>
+      <div class="wcard-back">${t}</div>
+    </div>`;
+  card.addEventListener("click", e => {
+    card.classList.toggle("flipped");
+    if (card.classList.contains("flipped")) confettiBurst(e.clientX, e.clientY);
+  });
+  grid.appendChild(card);
+});
+
+spawnFloaters(["✨","💖","🌸"], 10);
+</script>
+</body>
+</html>

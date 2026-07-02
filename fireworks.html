@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fireworks Festival ✦</title>
+<meta name="description" content="A birthday this special deserves fireworks." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Dancing+Script:wght@500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="night">
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">For Diya✿</a>
+  <button class="nav-toggle" aria-label="Menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Welcome</a><a href="gallery.html">Gallery</a><a href="fireworks.html">Fireworks</a><a href="letters.html">Open When</a><a href="garden.html">Garden</a><a href="wonderful.html">100 Things</a><a href="wishes.html">Wishes</a><a href="lanterns.html">Lanterns</a><a href="goodnight.html">Goodnight</a>
+  </div>
+</nav>
+
+<section class="fireworks-stage">
+  <canvas id="fireworks"></canvas>
+  <div class="fw-hint">
+    <p class="eyebrow" style="color:var(--star)">Tap the sky</p>
+    <h1>Fireworks, for you.</h1>
+    <p>You wanted this but I can't irl but i hope this is good, you can tap anywhere on the screen for a firework, enjoyyyyy</p>
+
+    <div class="wishes">
+      <div class="wish">May this year bring you joy.</div>
+      <div class="wish">May your dreams grow bigger.</div>
+      <div class="wish">May your happiest days still be ahead.</div>
+      <div class="wish">May you always find reasons to smile.</div>
+    </div>
+  </div>
+</section>
+
+<div style="text-align:center; padding: 40px 24px 80px; position: relative; z-index: 2;">
+  <a href="letters.html" class="next-link" style="background: rgba(255,255,255,0.1); color:#fff; border-color: rgba(255,255,255,0.2)">Open the letters →</a>
+</div>
+
+<script src="script.js"></script>
+<script>
+/* ===== FIREWORKS ===== */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+function fit() { canvas.width = innerWidth; canvas.height = innerHeight; }
+fit(); addEventListener("resize", fit);
+
+const particles = [];
+const COLORS = ["#ffd6a5","#ffadad","#bdb2ff","#caffbf","#9bf6ff","#fdffb6","#ffc6ff","#ffe066"];
+const PATTERNS = ["ring","heart","star","burst"];
+
+function playFireworkSound() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime;
+
+    const gain = audioCtx.createGain();
+    gain.connect(audioCtx.destination);
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+    const osc = audioCtx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(300, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+    osc.connect(gain);
+    osc.start(now);
+    osc.stop(now + 0.5);
+
+    const noiseGain = audioCtx.createGain();
+    noiseGain.connect(audioCtx.destination);
+    noiseGain.gain.setValueAtTime(0.04, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+    const bufferSize = audioCtx.sampleRate * 0.3;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    noise.connect(noiseGain);
+    noise.start(now);
+  } catch (e) {}
+}
+
+function launch(x, y, pattern) {
+  playFireworkSound();
+  pattern = pattern || PATTERNS[Math.floor(Math.random()*PATTERNS.length)];
+  const color = COLORS[Math.floor(Math.random()*COLORS.length)];
+  const count = pattern === "burst" ? 140 : 90;
+  for (let i = 0; i < count; i++) {
+    const a = (i/count) * Math.PI * 2;
+    let vx, vy;
+    if (pattern === "heart") {
+      const t = a;
+      vx = 16 * Math.pow(Math.sin(t), 3) * 0.4;
+      vy = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t)) * 0.4;
+    } else if (pattern === "star") {
+      const r = (i % 2 === 0) ? 7 : 3;
+      vx = Math.cos(a) * r; vy = Math.sin(a) * r;
+    } else if (pattern === "ring") {
+      vx = Math.cos(a) * 6; vy = Math.sin(a) * 6;
+    } else {
+      const s = Math.random() * 6 + 2;
+      vx = Math.cos(a) * s; vy = Math.sin(a) * s;
+    }
+    particles.push({ x, y, vx, vy, life: 1, color, size: 2 + Math.random()*1.5 });
+  }
+}
+
+function loop() {
+  ctx.fillStyle = "rgba(13,16,36,0.18)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy; p.vy += 0.04; p.vx *= 0.99; p.vy *= 0.99;
+    p.life -= 0.012;
+    if (p.life <= 0) { particles.splice(i,1); continue; }
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(loop);
+}
+loop();
+
+canvas.addEventListener("click", e => launch(e.clientX, e.clientY));
+canvas.addEventListener("touchstart", e => {
+  const t = e.touches[0]; launch(t.clientX, t.clientY);
+});
+
+/* auto launches */
+function auto() {
+  const x = innerWidth * (0.2 + Math.random()*0.6);
+  const y = innerHeight * (0.15 + Math.random()*0.4);
+  launch(x, y);
+  setTimeout(auto, 1200 + Math.random()*1500);
+}
+setTimeout(auto, 600);
+
+/* ===== SHOOTING STARS ===== */
+function shoot() {
+  const s = document.createElement("div");
+  s.className = "shooting-star";
+  s.style.left = (Math.random()*60+20) + "%";
+  s.style.top = (Math.random()*30) + "%";
+  s.style.transition = "transform 1.2s linear, opacity 1.2s";
+  document.body.appendChild(s);
+  requestAnimationFrame(() => {
+    s.style.transform = `translate(${200 + Math.random()*200}px, ${100+Math.random()*100}px)`;
+    s.style.opacity = 0;
+  });
+  setTimeout(() => s.remove(), 1400);
+}
+setInterval(shoot, 3500);
+</script>
+</body>
+</html>

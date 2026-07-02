@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Welcome to the Festival ✿ Happy Birthday</title>
+<meta name="description" content="A festival dedicated to celebrating you." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Dancing+Script:wght@500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="floaters"></div>
+
+<!-- NAV (same on every page) -->
+<nav class="nav">
+  <a href="index.html" class="nav-brand">For Diya✿</a>
+  <button class="nav-toggle" aria-label="Menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Welcome</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="fireworks.html">Fireworks</a>
+    <a href="letters.html">Open When</a>
+    <a href="garden.html">Garden</a>
+    <a href="wonderful.html">100 Things</a>
+    <a href="wishes.html">Wishes</a>
+    <a href="lanterns.html">Lanterns</a>
+    <a href="goodnight.html">Goodnight</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <p class="eyebrow">Welcome to the festival</p>
+    <h1 class="display">Today Is Diya's Day</h1>
+    <p class="subtitle">a celebration of you</p>
+    <p class="msg">Today isn't just a birthday. It's a celebration of everything that makes you uniquely you.</p>
+
+    <!-- COUNTDOWN -- edit target date in script below to count to next birthday -->
+    <div class="countdown" aria-label="Until the next celebration">
+      <div class="cell"><div class="num">00</div><div class="lbl">Days</div></div>
+      <div class="cell"><div class="num">00</div><div class="lbl">Hours</div></div>
+      <div class="cell"><div class="num">00</div><div class="lbl">Mins</div></div>
+      <div class="cell"><div class="num">00</div><div class="lbl">Secs</div></div>
+    </div>
+
+    <button class="btn cta" id="celebrateBtn">🎉 Begin the celebration</button>
+  </div>
+</section>
+
+<section class="container" style="padding-bottom: 60px;">
+  <div class="page-footer">
+    <a href="gallery.html" class="next-link">Step into the gallery →</a>
+  </div>
+</section>
+
+
+<script src="script.js"></script>
+<script>
+  // EDIT: change to the date of the next birthday in YYYY-MM-DDTHH:MM:SS
+  startCountdown("2026-07-06T00:00:00");
+  spawnFloaters(["✨","🌸","🎀","⭐","🎈","💫","🌷"], 22);
+
+  // celebrate button - confetti
+  document.getElementById("celebrateBtn").addEventListener("click", e => {
+    confettiBurst(e.clientX, e.clientY);
+  });
+  // one auto-burst on entry
+  setTimeout(() => confettiBurst(innerWidth/2, innerHeight*0.35), 700);
+</script>
+</body>
+</html>
