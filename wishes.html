@@ -135,16 +135,22 @@ if (isTouch) {
 }
 
 let lastTouchT = 0;
+let touchStartX = 0, touchStartY = 0;
 canvas.addEventListener("touchstart", e => {
-  e.preventDefault();
+  const t = e.touches[0];
+  touchStartX = t.clientX; touchStartY = t.clientY;
+}, { passive: true });
+canvas.addEventListener("touchend", e => {
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
+  if (Math.hypot(dx, dy) > 10) return; // scroll, not a tap
   const now = Date.now();
-  if (now - lastTouchT < 400) return; // debounce
+  if (now - lastTouchT < 400) return;
   lastTouchT = now;
-  const touch = e.touches[0];
-  const s = pickStar(touch.clientX, touch.clientY) || stars[Math.floor(Math.random()*stars.length)];
+  const s = pickStar(t.clientX, t.clientY) || stars[Math.floor(Math.random()*stars.length)];
   showWish(s.wish);
-  confettiBurst(touch.clientX, touch.clientY);
-}, { passive: false });
+  confettiBurst(t.clientX, t.clientY);
+}, { passive: true });
 </script>
 </body>
 </html>
