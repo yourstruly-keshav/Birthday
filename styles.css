@@ -752,6 +752,39 @@ body.garden { background: linear-gradient(180deg, #f0f8ee 0%, #e7f0e3 100%); }
   margin-top: 50px; font-family: var(--font-script);
   font-size: clamp(2.5rem, 7vw, 4.5rem); color: var(--star);
 }
+.goodnight .more-link {
+  margin-top: 18px; font-family: var(--font-body);
+  font-size: clamp(1rem, 2.2vw, 1.25rem); color: #cfc4e8;
+}
+.goodnight .more-link a {
+  font-family: var(--font-script); color: var(--star);
+  border-bottom: 1px solid rgba(255,244,194,0.4);
+  transition: border-color 0.3s, color 0.3s;
+}
+.goodnight .more-link a:hover {
+  border-color: var(--star); color: #fff;
+}
+
+/* star-glow button */
+.btn-star {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: rgba(255,244,194,0.12);
+  border: 1px solid rgba(255,244,194,0.35);
+  color: var(--star);
+  font-family: var(--font-script);
+  font-size: 1.15rem;
+  box-shadow: 0 0 18px rgba(255,244,194,0.15);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  margin-top: 8px;
+}
+.btn-star:hover {
+  transform: translateY(-2px);
+  background: rgba(255,244,194,0.22);
+  box-shadow: 0 0 28px rgba(255,244,194,0.35);
+  color: #fff;
+}
 
 .visualizer {
   display: flex; gap: 4px; justify-content: center; align-items: end;
